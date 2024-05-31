@@ -5,7 +5,7 @@ input_image = imread(imPath);
 
 R_comp = input_image(:, :, 1);
 
-quality = 100; %<---- CHANGE THIS PARAMETER
+quality = 50; %<---- CHANGE THIS PARAMETER
 chrominance_subsampling = 2;%<---- CHANGE THIS PARAMETER
 %chrominance_subsampling is the subsampling coefficient for chrominance
 %it must be a power of 2 and less than min(dim1, dim2)/8
@@ -49,7 +49,9 @@ toc;
 
 figure;
 subplot(1,2,1), imshow(input_image); % show results
+title("original image");
 subplot(1,2,2), imshow(output_image); % show results
+title("after compression");
 sgtitle(["INTERNAL FORMAT = LUV", "ratio = ", num2str(ratio)]);
 
 tic;
@@ -60,8 +62,17 @@ toc;
 
 figure;
 subplot(1,2,1), imshow(input_image); % show results
+title("original image");
 subplot(1,2,2), imshow(output_image); % show results
+title("after compression");
 sgtitle(["INTERNAL FORMAT = YCBCR", "ratio = ", num2str(ratio)]);
+
+
+%===================================================================
+%CHECK DEPENDENCY
+[fList, pList] = matlab.codetools.requiredFilesAndProducts('demo.m');
+{pList.Name}
+
 
 % Gray colored image
 %=========================================================================================
