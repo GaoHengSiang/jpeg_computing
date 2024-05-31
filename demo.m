@@ -5,7 +5,7 @@ input_image = imread(imPath);
 
 R_comp = input_image(:, :, 1);
 
-quality = 1; %<---- CHANGE THIS PARAMETER
+quality = 100; %<---- CHANGE THIS PARAMETER
 chrominance_subsampling = 2;%<---- CHANGE THIS PARAMETER
 %chrominance_subsampling is the subsampling coefficient for chrominance
 %it must be a power of 2 and less than min(dim1, dim2)/8
@@ -43,6 +43,7 @@ tic;
 %chrominance_ds_coef is the subsampling coefficient for chrominance
 %it must be a power of 2 and less than min(dim1, dim2)/8
 [output_image, compressed_vector, ratio ] = jpeg_computing_luv(input_image, quality, chrominance_subsampling);
+%[output_image, compressed_vector, ratio ] = jpeg_computing_old(input_image, quality);
 toc;
 
 

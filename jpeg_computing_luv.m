@@ -20,6 +20,10 @@ dim1 = size(input_image,1); % image width
 dim2 = size(input_image,2); % image height
 dim3 = size(input_image,3); % number of channels
 
+L_range = 100;
+u_range = 354;
+v_range = 262;
+
 disp("conversion to LUV format...");
 if (dim3 == 3)
     luvmap = rgb2luv (input_image);
@@ -35,9 +39,9 @@ disp("DONE");
 %==============================================
 %Implement Downsample of Chromatic Components
 
-L = luvmap(:, :, 1);
-u = luvmap(:, :, 2);
-v = luvmap(:, :, 3);
+L = luvmap(:, :, 1) / L_range; %range 0 ~ 100
+u = luvmap(:, :, 2) / u_range; %range -134 ~ 220
+v = luvmap(:, :, 3) / v_range; %range -140 ~ 122
 
 disp("downsample...");
 %makeshift downsampling block
@@ -117,8 +121,9 @@ disp("DONE");
 
 %UPSAMPLE
 disp("upsample...");
-u_loss = zero_order_upsample(u_loss, chrominance_ds_coef);
-v_loss = zero_order_upsample(v_loss, chrominance_ds_coef);
+L_loss = L_loss * L_range;
+u_loss = zero_order_upsample(u_loss, chrominance_ds_coef) * u_range;
+v_loss = zero_order_upsample(v_loss, chrominance_ds_coef) * v_range;
 disp("DONE");
 
 %CONVERT BACK TO RGB UNIT8

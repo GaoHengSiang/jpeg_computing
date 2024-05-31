@@ -13,10 +13,14 @@ function [output_image, compressed_vector, ratio ] = jpeg_computing_ycbcr( input
 
 %---------------------------
 % define init values
+
+
 n = 8; % size of blocks
 dim1 = size(input_image,1); % image width
 dim2 = size(input_image,2); % image height
 dim3 = size(input_image,3); % number of channels
+
+range = 255;
 
 disp("conversion to yCbCr format...");
 if (dim3 == 3)
@@ -33,9 +37,11 @@ disp("DONE");
 %==============================================
 %Implement Downsample of Chromatic Components
 
-y = ycbcrmap(:, :, 1);
-cb = ycbcrmap(:, :, 2);
-cr = ycbcrmap(:, :, 3);
+%range of Y, CB, CR are all 0 ~ 255
+
+y = ycbcrmap(:, :, 1) / range; 
+cb = ycbcrmap(:, :, 2) / range;
+cr = ycbcrmap(:, :, 3) / range;
 
 disp("downsample...");
 %makeshift downsampling block
@@ -115,8 +121,9 @@ disp("DONE");
 
 %UPSAMPLE
 disp("upsample...");
-cb_loss = zero_order_upsample(cb_loss, chrominance_ds_coef);
-cr_loss = zero_order_upsample(cr_loss, chrominance_ds_coef);
+y_loss = y_loss * range;
+cb_loss = zero_order_upsample(cb_loss, chrominance_ds_coef) * range;
+cr_loss = zero_order_upsample(cr_loss, chrominance_ds_coef) * range;
 disp("DONE");
 
 %CONVERT BACK TO RGB UNIT8
