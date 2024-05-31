@@ -5,7 +5,11 @@ input_image = imread(imPath);
 
 R_comp = input_image(:, :, 1);
 
-quality = 100; %<---- CHANGE THIS PARAMETER
+quality = 1; %<---- CHANGE THIS PARAMETER
+chrominance_subsampling = 2;%<---- CHANGE THIS PARAMETER
+%chrominance_subsampling is the subsampling coefficient for chrominance
+%it must be a power of 2 and less than min(dim1, dim2)/8
+
 %see how image quality varies with this parameter
 %and see how the compression ratio (of the file size) changes
 
@@ -38,11 +42,26 @@ quality = 100; %<---- CHANGE THIS PARAMETER
 tic;
 %chrominance_ds_coef is the subsampling coefficient for chrominance
 %it must be a power of 2 and less than min(dim1, dim2)/8
-[output_image, compressed_vector, ratio ] = jpeg_computing(input_image, quality, 2);
+[output_image, compressed_vector, ratio ] = jpeg_computing_luv(input_image, quality, chrominance_subsampling);
 toc;
 
+
+figure;
 subplot(1,2,1), imshow(input_image); % show results
 subplot(1,2,2), imshow(output_image); % show results
+sgtitle(["INTERNAL FORMAT = LUV", "ratio = ", num2str(ratio)]);
+
+tic;
+%chrominance_ds_coef is the subsampling coefficient for chrominance
+%it must be a power of 2 and less than min(dim1, dim2)/8
+[output_image, compressed_vector, ratio ] = jpeg_computing_ycbcr(input_image, quality, chrominance_subsampling);
+toc;
+
+figure;
+subplot(1,2,1), imshow(input_image); % show results
+subplot(1,2,2), imshow(output_image); % show results
+sgtitle(["INTERNAL FORMAT = YCBCR", "ratio = ", num2str(ratio)]);
+
 % Gray colored image
 %=========================================================================================
 %[ output_image, compressed_vector, ratio ] = jpeg_computing(rgb2gray(input_image), quality);
