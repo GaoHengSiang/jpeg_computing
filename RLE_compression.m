@@ -2,7 +2,7 @@ function [compressed_vector, AC_dict, DC_dict] = RLE_compression(entropy_mat, bl
     disp("RLE coding...");
     [DC, AC] = separate_dc_ac(entropy_mat, blocksize);
     [VLC_AC, VLI_AC] = rle_encode_ac(AC, blocksize);
-    [VLC_DC, VLI_DC] = rle_encode_dc(DC)
+    [VLC_DC, VLI_DC] = rle_encode_dc(DC);
     disp("DONE");
     
     disp("huffman coding...");
@@ -98,21 +98,27 @@ function [VLC, VLI] = rle_encode_ac(data, blocksize)
     %for other nuances, consult JPEG baseline model standards
 
 
-
+    
     % Initialize variables
+    ac_block_len = blocksize*blocksize-1;%for 8x8 blocks, there are 63 ac components
     count = 0;
-    VLC = cell(0, 1);
+    max_len = length(data) + length(data)/ac_block_len;
+    VLC = cell(max_len, 1);
+    %VLC = cell(0, 1);
+    idx = 0;
     VLI = false(0, 1);
 
     if isempty(data)
         return;
     end
-    ac_block_len = blocksize*blocksize-1;%for 8x8 blocks, there are 63 ac components
+
     % Iterate through the input data
     for i = 1:length(data)
         if data(i) == 0
             if(count == 15 || mod(i, ac_block_len) == 0)
-                VLC = [VLC; {[count, 0]}];%append Extension symbol
+                idx = idx + 1;
+                VLC(idx, 1) = {[count, 0]};%append Extension symbol
+                %VLC = [VLC; {[count, 0]}];
                 count = 0;
             else 
                 count = count + 1;
@@ -125,11 +131,16 @@ function [VLC, VLI] = rle_encode_ac(data, blocksize)
             bin = transpose(bin == '1');
             bin(1, 1) = sign_bit;
             VLI = [VLI; bin];%append the VLI code
-            VLC = [VLC; {[count, real_len]}];
+            idx = idx + 1;
+            VLC(idx, 1) = {[count, real_len]};
+            %VLC = [VLC; {[count, real_len]}];
             count = 0;
         end
         if (mod(i, ac_block_len) == 0)
-            VLC = [VLC; {[0, 0]}];
+            idx = idx + 1;
+            VLC(idx, 1) = {[0, 0]};
+            %VLC = [VLC; {[0, 0]}];
         end
     end
+    VLC = VLC(1: idx, 1);%truncate the excess length
 end
