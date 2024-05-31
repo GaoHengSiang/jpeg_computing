@@ -68,7 +68,7 @@ quantY = @(block_struct) round( block_struct.data./qY);
 dequantY = @(block_struct) block_struct.data.*qY;
 quantC = @(block_struct) round( block_struct.data./qC);
 dequantC = @(block_struct) block_struct.data.*qC;
-entropy_proc = @(block_struct) entropy_cod(block_struct.data, n);
+zig_zag_proc = @(block_struct) zig_zag_cod(block_struct.data, n);
 
 %initialize compressed vector
 %-------------------------------------------
@@ -87,11 +87,11 @@ u_q = blockproc(u_dct,[n n], quantC);  % quantization for Chrominance
 v_q = blockproc(v_dct,[n n], quantC);  % quantization for Chrominance
 disp("DONE");
 
-%ENTROPY BLOCK
-disp("entropy coding...");
-L_ent = blockproc(int16(L_q), [n n], entropy_proc);
-u_ent = blockproc(int16(u_q), [n n], entropy_proc);
-v_ent = blockproc(int16(v_q), [n n], entropy_proc);
+%zig_zag BLOCK
+disp("zig_zag coding...");
+L_ent = blockproc(int16(L_q), [n n], zig_zag_proc);
+u_ent = blockproc(int16(u_q), [n n], zig_zag_proc);
+v_ent = blockproc(int16(v_q), [n n], zig_zag_proc);
 disp("DONE");
 
 %RLE BLOCK & HUFFMAN BLOCK

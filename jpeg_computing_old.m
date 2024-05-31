@@ -48,7 +48,7 @@ quantY = @(block_struct) round( block_struct.data./qY);
 dequantY = @(block_struct) block_struct.data.*qY;
 quantC = @(block_struct) round( block_struct.data./qC);
 dequantC = @(block_struct) block_struct.data.*qC;
-entropy_proc = @(block_struct) entropy_cod(block_struct.data, n);
+zig_zag_proc = @(block_struct) zig_zag_cod(block_struct.data, n);
 
 %initialize compressed vector
 compressed_vector = false(0, 1);
@@ -64,14 +64,14 @@ for ch=1:dim3
     else
         channel_q = blockproc(channel_dct,[n n], quantC);  % quantization for colors
     end
-    entropy_out = blockproc(channel_q,[n n], entropy_proc); % compute entropy code for the whole channel
-    save("entropy_mat.mat", "entropy_out");%for testing purposes
+    zig_zag_out = blockproc(channel_q,[n n], zig_zag_proc); % compute zig_zag code for the whole channel
+    save("zig_zag_mat.mat", "zig_zag_out");%for testing purposes
         
 
     %------------------------------------------------------
     %RLE COMPRESSION
     %------------------------------------------------------
-    [comp, AC_dict, DC_dict] = RLE_compression(entropy_out, n);
+    [comp, AC_dict, DC_dict] = RLE_compression(zig_zag_out, n);
     %HOW TO CACULATE THE SIZE (in bits) OF DICT?
 
 
@@ -103,16 +103,16 @@ end
 
 
 
-% function [entropy_code] = get_entropy (entropy_raw_matrix, n, dim1, dim2)
-% % go by tiles in loops to extract shortened entropy codes (without
+% function [zig_zag_code] = get_zig_zag (zig_zag_raw_matrix, n, dim1, dim2)
+% % go by tiles in loops to extract shortened zig_zag codes (without
 % % zeros on the end)
-% step = n-1; % poor stuff for entropy coding iterations, should be avoided
-% tile = entropy_raw_matrix(1:1+step, 1:1+step);
-% entropy_code = tile(1:find(tile(:),1,'last'));
+% step = n-1; % poor stuff for zig_zag coding iterations, should be avoided
+% tile = zig_zag_raw_matrix(1:1+step, 1:1+step);
+% zig_zag_code = tile(1:find(tile(:),1,'last'));
 % for i=step+2:step+1:dim1-step
 %     for j=step+2:step+1:dim2-step
-%         tile = entropy_raw_matrix(i:i+step, j:j+step);
-%         entropy_code = cat(2, entropy_code, tile(1:find(tile(:),1,'last')));
+%         tile = zig_zag_raw_matrix(i:i+step, j:j+step);
+%         zig_zag_code = cat(2, zig_zag_code, tile(1:find(tile(:),1,'last')));
 %     end
 % end
 % end
