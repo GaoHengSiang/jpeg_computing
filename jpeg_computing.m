@@ -11,6 +11,8 @@ function [output_image, compressed_vector, ratio ] = jpeg_computing( input_image
 
 %ratio is the bit ratio of the input_image to the compressed_vector
 
+%chrominance_ds_coef is the subsampling coefficient for chrominance
+%it must be a power of 2 and less than min(dim1, dim2)/8
 %---------------------------
 % define init values
 n = 8; % size of blocks
@@ -89,12 +91,14 @@ v_ent = blockproc(v_q, [n n], entropy_proc);
 disp("DONE");
 
 %RLE BLOCK & HUFFMAN BLOCK
-
 [L_comp, L_AC_dict, L_DC_dict] = RLE_compression(L_ent, n);
+disp("Luminance DONE");
 [u_comp, u_AC_dict, u_DC_dict] = RLE_compression(u_ent, n);
+disp("U Chrominance DONE");
 [v_comp, v_AC_dict, v_DC_dict] = RLE_compression(v_ent, n);
+disp("V Chrominance DONE");
 
-compressed_vector = [L_comp; u_comp; v_comp]%stack along the first dimension
+compressed_vector = [L_comp; u_comp; v_comp];%stack along the first dimension
 
 %===========================================================
 %DEQUANTIZATION BLOCK
