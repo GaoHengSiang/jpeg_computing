@@ -85,9 +85,9 @@ disp("DONE");
 
 %ENTROPY BLOCK
 disp("entropy coding...");
-L_ent = blockproc(L_q, [n n], entropy_proc);
-u_ent = blockproc(u_q, [n n], entropy_proc);
-v_ent = blockproc(v_q, [n n], entropy_proc);
+L_ent = blockproc(int16(L_q), [n n], entropy_proc);
+u_ent = blockproc(int16(u_q), [n n], entropy_proc);
+v_ent = blockproc(int16(v_q), [n n], entropy_proc);
 disp("DONE");
 
 %RLE BLOCK & HUFFMAN BLOCK
