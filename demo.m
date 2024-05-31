@@ -11,16 +11,25 @@ quality = 100; %<---- CHANGE THIS PARAMETER
 
 
 %=========================================================================================
-
-[X, Y, Z] = rgb2xyz(input_image(:, :, 1), input_image(:, :, 2), input_image(:, :, 3));
-tic;
-[L, u, v] = xyz2luv(X, Y, Z);
-[X_, Y_, Z_] = luv2xyz(L, u, v);
-toc;
-[R, G, B] = xyz2rgb(X, Y, Z);
-output_image = cat(3, R, G, B);
-subplot(1,2,1), imshow(input_image) % show results
-subplot(1,2,2), imshow(output_image) % show results
+%Testing rgb <--> xyz and xyz <--> rgb conversion
+% [X, Y, Z] = rgb2xyz(input_image(:, :, 1), input_image(:, :, 2), input_image(:, :, 3));
+% tic;
+% [L, u, v] = xyz2luv(X, Y, Z);
+% [X_, Y_, Z_] = luv2xyz(L, u, v);
+% toc;
+% [R, G, B] = xyz2rgb(X, Y, Z);
+% output_image = cat(3, R, G, B);
+%=======================================================
+%Testing rgb <--> luv conversion
+% tic;
+% luvmap = rgb2luv(input_image);
+% toc;
+% tic;
+% output_image = luv2rgb(luvmap);
+% toc;
+%=======================================================
+% subplot(1,2,1), imshow(input_image) % show results
+% subplot(1,2,2), imshow(output_image) % show results
 %=========================================================================================
 
 
