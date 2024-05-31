@@ -35,8 +35,12 @@ quality = 100; %<---- CHANGE THIS PARAMETER
 
 % Colored image in any format supported by MATLAB
 %=========================================================================================
-%[ output_image, compressed_vector, ratio ] = jpeg_computing(input_image, quality);
+tic;
+[output_image, compressed_vector, ratio ] = jpeg_computing(input_image, quality, 2);
+toc;
 
+subplot(1,2,1), imshow(input_image); % show results
+subplot(1,2,2), imshow(output_image); % show results
 % Gray colored image
 %=========================================================================================
 %[ output_image, compressed_vector, ratio ] = jpeg_computing(rgb2gray(input_image), quality);

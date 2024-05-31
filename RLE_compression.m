@@ -1,10 +1,14 @@
 function [compressed_vector, AC_dict, DC_dict] = RLE_compression(entropy_mat, blocksize)
+    disp("RLE coding...");
     [DC, AC] = separate_dc_ac(entropy_mat, blocksize);
     [VLC_AC, VLI_AC] = rle_encode_ac(AC, blocksize);
-    [VLC_DC, VLI_DC] = rle_encode_dc(DC);
+    [VLC_DC, VLI_DC] = rle_encode_dc(DC)
+    disp("DONE");
     
+    disp("huffman coding...");
     [huff_AC, AC_dict] = huffman_cod(transpose(VLC_AC));
     [huff_DC, DC_dict] = huffman_cod(transpose(VLC_DC));
+    disp("DONE");
 
     compressed_vector = [huff_AC; VLI_AC; huff_DC; VLI_DC];
     %convert to logical
