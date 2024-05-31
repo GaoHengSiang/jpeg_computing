@@ -83,9 +83,9 @@ disp("DONE");
 
 %ENTROPY BLOCK
 disp("entropy coding...");
-L_ent = blockproc(L_q, [n n], entropy_proc);
-u_ent = blockproc(u_q, [n n], entropy_proc);
-v_ent = blockproc(v_q, [n n], entropy_proc);
+L_ent = blockproc(int16(L_q), [n n], entropy_proc);
+u_ent = blockproc(int16(u_q), [n n], entropy_proc);
+v_ent = blockproc(int16(v_q), [n n], entropy_proc);
 disp("DONE");
 
 %RLE BLOCK & HUFFMAN BLOCK
@@ -94,7 +94,7 @@ disp("DONE");
 [u_comp, u_AC_dict, u_DC_dict] = RLE_compression(u_ent, n);
 [v_comp, v_AC_dict, v_DC_dict] = RLE_compression(v_ent, n);
 
-compressed_vector = [L_comp; u_comp; v_comp]%stack along the first dimension
+compressed_vector = [L_comp; u_comp; v_comp];%stack along the first dimension
 
 %===========================================================
 %DEQUANTIZATION BLOCK
