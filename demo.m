@@ -36,6 +36,8 @@ quality = 100; %<---- CHANGE THIS PARAMETER
 % Colored image in any format supported by MATLAB
 %=========================================================================================
 tic;
+%chrominance_ds_coef is the subsampling coefficient for chrominance
+%it must be a power of 2 and less than min(dim1, dim2)/8
 [output_image, compressed_vector, ratio ] = jpeg_computing(input_image, quality, 2);
 toc;
 
