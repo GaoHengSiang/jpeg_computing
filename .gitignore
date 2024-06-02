@@ -6,3 +6,6 @@
 
 #image files, not suitable for git
 /output_images
+
+# ignore DS_Store
+.DS_Store

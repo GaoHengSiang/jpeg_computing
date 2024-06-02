@@ -96,8 +96,8 @@ end
 % compute compression ratio
 % compressed_vector is binary, input image has one byte per pixel
 ratio = dim1 * dim2 * dim3 *8 / (length(compressed_vector)); % size of huffman dicitonary  is missed
-subplot(1,2,1), imshow(input_image) % show results
-subplot(1,2,2), imshow(output_image) % show results
+subplot(1,2,1), imshow(input_image) % show results 
+subplot(1,2,2), imshow(output_image) % show results 
 end 
 
 

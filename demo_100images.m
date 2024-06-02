@@ -62,3 +62,28 @@ end
 save('ratio_100.mat', 'ratio');
 
 
+%=========================================================================================
+% Load the saved ratio information
+load('ratio_100.mat');
+
+% Define the quality parameter range
+quality_range = lower:upper;
+
+% Plot the compression ratios
+figure;
+hold on;
+plot(quality_range, ratio(quality_range, 1), '-o', 'DisplayName', 'LUV');
+plot(quality_range, ratio(quality_range, 2), '-x', 'DisplayName', 'YCbCr');
+hold off;
+
+% Add labels and title
+xlabel('Quality Parameter');
+ylabel('Compression Ratio');
+title('Compression Ratio vs. Quality Parameter');
+legend('show');
+grid on;
+
+% Save the figure
+saveas(gcf, 'compression_ratio_vs_quality.png'); 
+
+
