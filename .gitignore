@@ -9,3 +9,6 @@
 
 # ignore DS_Store
 .DS_Store
+
+#ignore photos
+*.png
